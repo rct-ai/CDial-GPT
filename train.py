@@ -47,7 +47,7 @@ def average_distributed_scalar(scalar, args):
 
 def train():
     parser = ArgumentParser()
-    parser.add_argument('--gpt2', action='store_true', help="use gpt2")
+    parser.add_argument('--gpt2', action='store_true', help="use gpt2")  # 有传入就设为true
     parser.add_argument("--model_checkpoint", type=str, default="config/cgpt/", help="Path or URL of the model")
     parser.add_argument("--from_step", type=int, default=-1, help="Init learning rate from this step")
     parser.add_argument('--pretrained', action='store_true', help="If False train from scratch")
@@ -55,15 +55,15 @@ def train():
                         help="Path or url of the dataset. ")
     parser.add_argument("--train_path", type=str, default="data/toy_train.txt",
                         help="Path of the train dataset for dist dataset. ")
-    parser.add_argument("--valid_path", type=str, default="data/toy_valid.txt",
+    parser.add_argument("--valid_path", type=str, default="stcdata/STC_test.json",
                         help="Path of the valid dataset for dist dataset. ")
     parser.add_argument("--dataset_cache", type=str, default="dataset_cache",
                         help="Path or url of the dataset cache")
     parser.add_argument('--log_file', '-log_file', type=str, default="", help="Output logs to a file under this path")
     parser.add_argument("--num_workers", type=int, default=8, help="Number of subprocesses for data loading")
     parser.add_argument("--n_epochs", type=int, default=70, help="Number of training epochs")
-    parser.add_argument("--train_batch_size", type=int, default=2, help="Batch size for training")
-    parser.add_argument("--valid_batch_size", type=int, default=2, help="Batch size for validation")
+    parser.add_argument("--train_batch_size", type=int, default=16, help="Batch size for training")
+    parser.add_argument("--valid_batch_size", type=int, default=16, help="Batch size for validation")
     parser.add_argument("--max_history", type=int, default=15, help="Number of previous exchanges to keep in history")
     parser.add_argument("--scheduler", type=str, default="noam", choices=['noam', 'linear'], help="method of optim")
     parser.add_argument("--n_emd", type=int, default=768, help="Number of n_emd in config file (for noam)")
