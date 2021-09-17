@@ -4,9 +4,8 @@
 @Date  : 2021/9/3 4:58 下午
 ==================================="""
 import logging
-from argparse import ArgumentParser
 from itertools import chain
-from pprint import pformat
+
 import random
 
 import torch
@@ -14,8 +13,7 @@ from flask import Flask
 from flask import request, jsonify
 from transformers import BertTokenizer, OpenAIGPTLMHeadModel, GPT2LMHeadModel
 import torch.nn.functional as F
-from interact import sample_sequence
-from config import cdialog_args
+
 
 SPECIAL_TOKENS = ["[CLS]", "[SEP]", "[PAD]", "[speaker1]", "[speaker2]"]
 
@@ -164,8 +162,8 @@ def talk():
         result = dialog.get_result(text)
         return jsonify(text=result), 200
     except Exception as e:
-        return jsonify(error='something went wrong'), 400
+        return jsonify(error='something went wrong: {}'.format(e)), 400
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8082)

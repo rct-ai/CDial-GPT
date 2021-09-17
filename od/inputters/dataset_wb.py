@@ -19,7 +19,7 @@ class WBDataset(Dataset):
         self.max_history = max_history
         self.pad = tokenizer.pad_token_id
         self.batch_first = batch_first
-        self.lm_labels = lm_labels
+        self.lm_labels = lm_labels  # 是否使用lm_labels
 
     def __len__(self):
         return len(self.data)
