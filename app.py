@@ -73,6 +73,7 @@ class Dialog(object):
         self.history.append(out_ids)
         self.history = self.history[-(2 * self.max_history + 1):]
         out_text = self.tokenizer.decode(out_ids, skip_special_tokens=True)
+        out_text = out_text.replace(" ", "")
 
         return out_text
 
@@ -162,7 +163,7 @@ def talk():
         result = dialog.get_result(text)
         return jsonify(text=result), 200
     except Exception as e:
-        return jsonify(error='something went wrong: {}'.format(e)), 400
+        return jsonify(error='something was wrong: {}'.format(e)), 400
 
 
 if __name__ == '__main__':
