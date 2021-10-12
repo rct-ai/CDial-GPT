@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  generate_dialogue_cn:
+    image: gouku4doc/generatedialogue-cn:v0
+    container_name: xianjian_generate_dialogue
+    working_dir: "/workspace"
+    command: ['python', 'app.py']
+    ports:
+      - 8088:8088
+
+    restart: always
+    volumes:
+      - $PWD/../:/workspace
+
