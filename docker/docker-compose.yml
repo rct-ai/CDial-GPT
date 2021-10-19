@@ -12,4 +12,6 @@ services:
     restart: always
     volumes:
       - $PWD/../:/workspace
+    devices:
+      - gpu
 
