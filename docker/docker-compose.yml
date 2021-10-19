@@ -5,13 +5,18 @@ services:
     image: gouku4doc/generatedialogue-cn:v0
     container_name: xianjian_generate_dialogue
     working_dir: "/workspace"
-    command: ['python', 'app.py']
+    command: ['python', 'app.py', '--model_dir=runs/Sep03_11-46-25_node3']
     ports:
       - 8088:8088
 
     restart: always
     volumes:
       - $PWD/../:/workspace
-    devices:
-      - gpu
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
 
