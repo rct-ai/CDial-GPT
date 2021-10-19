@@ -13,7 +13,7 @@ from flask import Flask
 from flask import request, jsonify
 from transformers import BertTokenizer, OpenAIGPTLMHeadModel, GPT2LMHeadModel
 import torch.nn.functional as F
-
+from argparse import ArgumentParser
 
 SPECIAL_TOKENS = ["[CLS]", "[SEP]", "[PAD]", "[speaker1]", "[speaker2]"]
 
@@ -22,13 +22,14 @@ app = Flask(__name__)
 
 class Dialog(object):
 
-    def __init__(self):
+    def __init__(self, model_dir):
         self.history = []
-        self._init_dialog()
 
-    def _init_dialog(self):
+        self._init_dialog(model_dir)
+
+    def _init_dialog(self, model_dir):
         self.gpt2 = False
-        self.model_checkpoint = 'runs/Sep03_11-46-25_node3'
+        self.model_checkpoint = model_dir
         self.max_history = 1
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.no_sample = False
@@ -153,7 +154,7 @@ class Dialog(object):
                                               for _ in s]
         return instance, sequence
 
-dialog = Dialog()
+
 
 @app.route('/talk', methods=['POST'])
 def talk():
@@ -167,4 +168,8 @@ def talk():
 
 
 if __name__ == '__main__':
+    args = ArgumentParser()
+    args.add_argument('--model_dir', type=str, help='model directory')
+    parser = args.parse_args()
+    dialog = Dialog(parser.model_dir)
     app.run(host="0.0.0.0", port=8088)
