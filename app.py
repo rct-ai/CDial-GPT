@@ -30,7 +30,7 @@ class Dialog(object):
     def _init_dialog(self, model_dir):
         self.gpt2 = False
         self.model_checkpoint = model_dir
-        self.max_history = 1
+        self.max_history = 5
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.no_sample = False
         self.max_length = 30
