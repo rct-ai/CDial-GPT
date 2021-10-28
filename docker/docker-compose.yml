@@ -1,9 +1,11 @@
-version: '2'
 
 services:
   generate_dialogue_cn:
-    image: gouku4doc/generatedialogue-cn:v0
+    image: rct-docker-registry.cn-zhangjiakou.cr.aliyuncs.com/algorithm/generatedialogue-cn:v0
     container_name: xianjian_generate_dialogue
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
     working_dir: "/workspace"
     command: ['python', 'app.py', '--model_dir=runs/Sep03_11-46-25_node3']
     ports:
@@ -17,6 +19,6 @@ services:
       resources:
         reservations:
           devices:
-            - capabilities:
-                - gpu
+            - driver: nvidia
+              capabilities: ["gpu"]
 

@@ -68,6 +68,7 @@ class Dialog(object):
         raw_text = text
         raw_text = ' '.join(list(raw_text.replace(" ", "")))
         self.history.append(self.tokenize(raw_text))
+        print(self.history)
         with torch.no_grad():
             out_ids = self.sample_sequence()
 
