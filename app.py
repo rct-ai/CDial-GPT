@@ -148,11 +148,27 @@ class Dialog(object):
         # global SPECIAL_TOKENS
         bos, eos, pad, speaker1, speaker2 = self.tokenizer.convert_tokens_to_ids(SPECIAL_TOKENS)
         sequence = [[bos]] + self.history + [reply + ([eos] if with_eos else [])]
+        print(sequence)
         sequence = [sequence[0]] + [[speaker2 if i % 2 else speaker1] + s for i, s in enumerate(sequence[1:])]
-        instance = {}
-        instance["input_ids"] = list(chain(*sequence))
-        instance["token_type_ids"] = [bos] + [speaker2 if i % 2 else speaker1 for i, s in enumerate(sequence[1:])
+        input_ids = list(chain(*sequence))
+        token_types = [bos] + [speaker2 if i % 2 else speaker1 for i, s in enumerate(sequence[1:])
                                               for _ in s]
+        ids_length = len(input_ids)
+        # 保证总长度小于512
+        if ids_length > 512:
+            input_ids_ = [input_ids[0]]
+            token_types_ = [token_types[0]]
+            input_ids_.extend(input_ids[ids_length - 511:])
+            token_types_.extend(token_types[ids_length - 511:])
+
+            instance = {}
+            instance["input_ids"] = input_ids_
+            instance["token_type_ids"] = token_types_
+            return instance, sequence
+
+        instance = {}
+        instance["input_ids"] = input_ids
+        instance["token_type_ids"] = token_types
         return instance, sequence
 
 

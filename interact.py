@@ -61,10 +61,25 @@ def build_input_from_segments(history, reply, tokenizer, with_eos=True):
     bos, eos, pad, speaker1, speaker2 = tokenizer.convert_tokens_to_ids(SPECIAL_TOKENS)
     sequence = [[bos]] + history + [reply + ([eos] if with_eos else [])]
     sequence = [sequence[0]] + [[speaker2 if i % 2 else speaker1] + s for i, s in enumerate(sequence[1:])]
+    input_ids = list(chain(*sequence))
+    token_types = [bos] + [speaker2 if i % 2 else speaker1 for i, s in enumerate(sequence[1:])
+                           for _ in s]
+    ids_length = len(input_ids)
+    # 保证总长度小于512
+    if ids_length > 512:
+        input_ids_ = [input_ids[0]]
+        token_types_ = [token_types[0]]
+        input_ids_.extend(input_ids[ids_length - 511:])
+        token_types_.extend(token_types[ids_length - 511:])
+
+        instance = {}
+        instance["input_ids"] = input_ids_
+        instance["token_type_ids"] = token_types_
+        return instance, sequence
+
     instance = {}
-    instance["input_ids"] = list(chain(*sequence))
-    instance["token_type_ids"] = [bos] + [speaker2 if i % 2 else speaker1 for i, s in enumerate(sequence[1:])
-                                          for _ in s]
+    instance["input_ids"] = input_ids
+    instance["token_type_ids"] = token_types
     return instance, sequence
 
 
@@ -98,7 +113,7 @@ def sample_sequence(history, tokenizer, model, args, current_output=None):
 def run():
     parser = ArgumentParser()
     parser.add_argument('--gpt2', action='store_true', help="use gpt2")
-    parser.add_argument("--model_checkpoint", type=str, default="runs/Sep03_11-46-25_node3", help="Path, url or short name of the model")
+    parser.add_argument("--model_checkpoint", type=str, default="CDial-GPT_LCCC-large", help="Path, url or short name of the model")
     parser.add_argument("--max_history", type=int, default=1, help="Number of previous utterances to keep in history")
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu",
                         help="Device (cuda or cpu)")
