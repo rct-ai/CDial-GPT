@@ -25,7 +25,7 @@ Keras-Preprocessing==1.1.2
 Markdown==3.3.4
 MarkupSafe==2.0.1
 numpy==1.19.5
-oauthlib==3.1.1
+oauthlib==3.2.1
 opt-einsum==3.3.0
 pip==21.2.2
 protobuf==3.17.3
