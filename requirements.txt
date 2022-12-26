@@ -55,5 +55,5 @@ transformers==2.1.1
 typing-extensions==3.7.4.3
 urllib3==1.26.6
 Werkzeug==2.0.1
-wheel==0.37.0
+wheel==0.38.1
 wrapt==1.12.1
